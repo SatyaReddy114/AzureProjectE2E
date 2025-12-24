@@ -8,6 +8,10 @@
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.loop_input",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "AzureSQLtoLake",
@@ -76,11 +80,11 @@
 									"parameters": {
 										"container": "bronze",
 										"folder": {
-											"value": "@pipeline().parameters.table",
+											"value": "@{item().table}_cdc",
 											"type": "Expression"
 										},
 										"file": {
-											"value": "@concat(pipeline().parameters.table,'_',variables('current'))",
+											"value": "@concat(item().table,'_',variables('current'))",
 											"type": "Expression"
 										}
 									}
@@ -337,7 +341,7 @@
 					{
 						"schema": "dbo",
 						"table": "DimDate",
-						"cdc_col": "updated_at",
+						"cdc_col": "date",
 						"from_date": ""
 					},
 					{
@@ -349,7 +353,7 @@
 					{
 						"schema": "dbo",
 						"table": "FactStream",
-						"cdc_col": "updated_at",
+						"cdc_col": "stream_timestamp",
 						"from_date": ""
 					}
 				]
